@@ -1,19 +1,18 @@
-from flask import Flask,render_template,request
+import os
+from flask import Flask, render_template, request
 import boto3
 import pymysql
 
 app = Flask(__name__)
 
-bucket_name="student-photo-demo-gopu"
+bucket_name = os.environ.get("S3_BUCKET_NAME")
 
-db=pymysql.connect(
-host="100.57.165.48",
-port="3306",
-user="admin",
-password="Admin123",
-database="studentdb"
+db = pymysql.connect(
+    host=os.environ.get("DB_HOST"),
+    user=os.environ.get("DB_USER"),
+    password=os.environ.get("DB_PASSWORD"),
+    database=os.environ.get("DB_NAME", "studentdb")
 )
-
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -57,5 +56,5 @@ def register():
 if __name__=="__main__":
     app.run(
         host="0.0.0.0",
-        port=5000
+        port=80
     )
